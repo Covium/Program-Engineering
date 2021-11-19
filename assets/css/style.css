@@ -1,0 +1,229 @@
+    /* Variables Root */
+:root {
+    --bg: #2f3237;
+
+    --th: #1111d4;
+    --th-light: #8989f5;
+    --th-odd: #4242f0;
+
+    --td: #0d78f2;
+    --td-light: #55a0f6;
+    --td-even: #0954aa;
+
+    --outer-stroke-td:
+            -1px -1px 0 var(--td),
+            0    -1px 0 var(--td),
+            1px  -1px 0 var(--td),
+            1px   0   0 var(--td),
+            1px   1px 0 var(--td),
+            0     1px 0 var(--td),
+            -1px  1px 0 var(--td),
+            -1px  0   0 var(--td);
+}
+
+
+
+    /* Whole HTML */
+html {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15pt;
+    font-weight: 500;
+    background: var(--bg);
+}
+
+
+
+    /* Content container IDs */
+#library-table {
+    width: 75%;
+    margin: 0 auto;
+}
+
+#overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+#edit, #remove {
+    width: 498px;
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+    background: var(--td);
+
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#library-table { z-index: 0; }
+#overlay       { z-index: 1; }
+#edit          { z-index: 2; }
+#remove        { z-index: 3; }
+
+
+
+    /* Table */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 5px 0;
+}
+
+
+    /* Table rows and their :hover */
+tbody tr:nth-child(odd) th:not(.invisible)  { background: var(--th-odd); }
+tbody tr:hover th:not(.invisible)           { background: var(--th-light); }
+
+tbody tr:nth-child(even) td:not(.invisible) { background: var(--td-even); }
+tbody tr:hover td:not(.invisible)           { background: var(--td-light); }
+
+
+    /* Table columns with numbers */
+tr td:nth-child(4),
+tr td:nth-child(5),
+tr td:nth-child(6) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+
+    /* TH, TD and their classes */
+th, td {
+    padding: 2px 4px;
+    border: 1px solid var(--bg);
+    border-radius: 4px;
+}
+
+th {
+    background: var(--th);
+    font-weight: bold;
+    text-align: center;
+    text-shadow: var(--outer-stroke-td);
+}
+
+thead th {
+    cursor: pointer;
+}
+
+th.number { width: 2.5%; }
+th.name   { width: 22.5%; }
+th.email  { width: 25%; }
+th.group,
+th.age,
+th.id     { width: 12.5%; }
+
+td { background: var(--td); }
+
+
+
+    /* FORM, LABEL, INPUT and their classes */
+form {
+    display: block;
+    text-align: left;
+    margin: 4px 50px 8px;
+}
+
+label { float: left; }
+
+button,
+input {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11pt;
+    padding: 2px 5px;
+    margin: 1px 0;
+    border-radius: 4px;
+    background: #fff;
+}
+
+button { cursor: pointer; }
+
+input[type=text],
+input[type=email],
+input[type=number] {
+    box-sizing: border-box;
+    font-size: 13.5pt;
+    margin-bottom: 7px;
+}
+
+input[value="Добавить"] {
+    margin: 0 1px;
+    padding: 2px 6px;
+}
+
+.choice-button { width: 42px; }
+
+.add-button,
+.edit-button,
+.remove-button { color: #fff; }
+
+.add-button {
+    background: #4cbb17;
+    border: 2px outset #388d11;
+}
+
+.edit-button {
+    background: #ff6700;
+    border: 2px outset #cc5200;
+}
+
+.remove-button {
+    background: #ff0800;
+    border: 2px outset #cc0700;
+}
+
+.close {
+    position: absolute;
+    right: 5px;
+    top: 3px;
+    width: 17px;
+    height: 17px;
+    opacity: 0.3;
+    cursor: pointer;
+}
+
+.close:hover { opacity: 1; }
+
+.close:before,
+.close:after {
+    position: absolute;
+    content: ' ';
+    height: 20px;
+    width: 2px;
+    background-color: #333;
+}
+
+.close:before { transform: rotate(45deg) }
+.close:after  { transform: rotate(-45deg) }
+
+
+
+    /* Miscellaneous classes */
+.full { width: 100% }
+
+.invisible {
+    background: none;
+    border: none;
+    cursor: auto;
+}
+
+.invisible:hover { background: none; }
+
+.header {
+    font-weight: bold;
+    margin: 3px 0;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    background: #000;
+}
