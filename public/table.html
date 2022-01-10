@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <title>Таблица данных</title>
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" />
+</head>
+
+
+
+<body>
+
+    <div id="library-table">
+        <button type="button" class="add-button">Добавить</button>
+
+        <table id="libraryTable" class="sortable">
+            <thead>
+                <tr>
+                    <th class="name">   ФИО     </th>
+                    <th class="email">  E-mail  </th>
+                    <th class="group">  Группа  </th>
+                    <th class="age">    Возраст </th>
+                    <th class="id">     ID      </th>
+                </tr>
+            </thead>
+            <tbody id="table">
+            </tbody>
+        </table>
+
+        <button type="button" class="add-button">Добавить</button>
+    </div>
+
+
+    <div id="overlay" style="display: none;">
+
+        <div id="edit" style="display: none;">
+            <div class="close cancel" data-id="edit"></div>
+            <div class="header">Добавление пользователя.</div>
+            <div class="line"></div>
+            <form>
+                <input type="hidden" id="Id" value="-1">
+
+                <label for="name"  class="full">ФИО:</label>
+                <input  id="name"  class="full" type="text"   placeholder="Иванов И.И." />
+
+                <label for="email" class="full">E-mail:</label>
+                <input  id="email" class="full" type="email"  placeholder="ivanov@corp.com" />
+
+                <label for="group" class="full">Группа:</label>
+                <input  id="group" class="full" type="text"   placeholder="ЭЭ-10" />
+
+                <label for="age"   class="full">Возраст:</label>
+                <input  id="age"   class="full" type="number" placeholder="18" />
+
+                <label for="id"    class="full">ID:</label>
+                <input  id="id"    class="full" type="number" placeholder="1234567" />
+
+                <div style="text-align: center;">
+                    <button type="button" class="submit" data-func="submit">Сохранить</button>
+                </div>
+            </form>
+        </div>
+
+
+        <div id="remove" style="display: none;">
+            <div class="header">Вы действительно хотите удалить запись о пользователе?</div>
+            <form>
+                <div style="text-align: center;">
+                    <button type="button" class="choice-button submit" data-func="remove">Да</button>
+                    <button type="button" class="choice-button cancel" data-id="remove">Нет</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</body>
+
+
+
+<script src="assets/js/main.js">      </script>
+<script src="assets/js/tablesort.js"> </script>
+<script>
+    new Tablesort(document.getElementById('libraryTable'));
+</script>
+
+</html>

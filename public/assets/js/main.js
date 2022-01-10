@@ -1,41 +1,13 @@
-const data = (new function () {
-    let int = 0;
-    const arr = {};
-
-    //Create
-    this.create = obj => {
-        obj.Id = int++;
-        arr[obj.Id] = obj;
-        return obj;
+let util = new function () {
+    this.ajax = (params, callback) => {
+        let url = "";
+        if (params.path !== undefined) { // Для удаления
+            url = params.path;
+            delete params.path;
+        }
+        fetch("/student" + url, params).then(data => data.json()).then(callback)
     }
 
-    //Read
-    this.getAll = () => {
-        return Object.values(arr);
-    }
-    this.get = id => arr[id];
-
-    //Update
-    this.update = obj => {
-        arr[obj.Id] = obj;
-        return obj;
-    }
-
-    //Delete
-    this.delete = id => {
-        delete arr[id];
-    }
-});
-
-data.create({
-    name: "Гаричев А.Д.",
-    email: "garichevad.21@edu.ystu.ru",
-    group: "ЦПИ-11",
-    age: "17",
-    id: "23540"
-});
-
-const util = new function () {
     this.parse = (tpl, obj) => {
         let str = tpl;
         for (let k in obj) {
@@ -44,10 +16,53 @@ const util = new function () {
         return str;
     };
 
-    this.id = el => document.getElementById(el);
-    this.q = el => document.querySelectorAll(el);
+    this.id = (el) => document.getElementById(el);
+    this.q = (el) => document.querySelectorAll(el);
     this.listen = (el, type, callback) => el.addEventListener(type, callback);
 }
+
+let data = new function () {
+    let inc = 0;
+    let arr = {};
+
+    this.init = (callback) => {
+        util.ajax({method: "GET"}, data => {
+            data.map(std => {
+                arr[std.Id] = std;
+                inc = std.Id;
+            });
+            inc++;
+            if (typeof callback == 'function') callback();
+        })
+    }
+
+    //Create
+    this.create = (obj) => {
+        obj.Id = inc++;
+        arr[obj.Id] = obj;
+        util.ajax({method: "POST", body: JSON.stringify(obj)});
+        return obj;
+    }
+
+    //Read
+    this.getAll = () => {
+        return Object.values(arr);
+    }
+    this.get = (id) => arr[id];
+
+    //Update
+    this.update = (obj) => {
+        arr[obj.Id] = obj;
+        util.ajax({method: "PUT", body: JSON.stringify(obj)});
+        return obj;
+    }
+
+    //Delete
+    this.delete = (id) => {
+        delete arr[id];
+        util.ajax({method: "DELETE", path: "/" + id});
+    }
+};
 
 const student = new function () {
     this.submit = () => {
@@ -79,21 +94,24 @@ const student = new function () {
         util.id("remove").style.display = "none"
     }
 
-    const init = ()=>{
-        this.render();
-        util.q("button.add-button").forEach(el=>{
-            util.listen(el, "click",add);
+    const init = () => {
+        data.init(() => {
+            this.render();
         });
 
-        util.q(".cancel").forEach(el=>{
-            util.listen(el, "click", ()=>{
+        util.q("button.add-button").forEach(el => {
+            util.listen(el, "click", add);
+        });
+
+        util.q(".cancel").forEach(el => {
+            util.listen(el, "click", () => {
                 util.id("overlay").style.display = "none";
                 util.id(el.dataset["id"]).style.display = "none";
             });
         });
 
-        util.q(".submit").forEach(el=>{
-            util.listen(el, "click", ()=>{
+        util.q(".submit").forEach(el => {
+            util.listen(el, "click", () => {
                 this[el.dataset["func"]]();
             });
         });
@@ -106,7 +124,7 @@ const student = new function () {
         util.id("edit").style.display = "block";
     };
 
-    const edit = el => {
+    const edit = (el) => {
         util.q("#edit form")[0].reset();
         const st = data.get(el.dataset["id"]);
 
@@ -117,41 +135,25 @@ const student = new function () {
     };
 
     let activeStudent = null;
-    const rm = el => {
+    const rm = (el) => {
         util.id("overlay").style.display = "block";
         util.id("remove").style.display = "block";
         activeStudent = el.dataset["id"];
     };
 
-    const listeners = {edit: [], rm: []};
-    const clearListener = ()=>{
-        listeners.edit.forEach(el=>{
-            el.removeEventListener("click",edit);
+    const addListener = () => {
+        util.q("button.edit-button").forEach(el => {
+            util.listen(el, "click", () => edit(el));
         });
 
-        listeners.rm.forEach(el=>{
-            el.removeEventListener("click",rm);
-        });
-
-        listeners.edit = [];
-        listeners.rm = [];
-    };
-
-    const addListener = ()=>{
-        util.q("button.edit-button").forEach(el=>{
-            listeners.edit.push(el);
-            util.listen(el, "click", ()=>edit(el));
-        });
-
-        util.q("button.remove-button").forEach(el=>{
-            listeners.rm.push(el);
-            util.listen(el, "click", ()=>rm(el));
+        util.q("button.remove-button").forEach(el => {
+            util.listen(el, "click", () => rm(el));
         });
     };
 
     this.render = () => {
-        clearListener()
-        util.id("table").innerHTML = data
+        util.id("table")
+            .innerHTML = data
             .getAll()
             .map(el => util.parse(tpl, el)).join("");
         addListener();
@@ -169,5 +171,5 @@ const student = new function () {
                 <button type="button" class="full remove-button" data-id="{Id}">Удалить</button>
             </td>
         </tr>`;
-    window.addEventListener("load",init);
+    window.addEventListener("load", init);
 }
