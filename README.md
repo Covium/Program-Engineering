@@ -1,4 +1,4 @@
-# Program-Engineering
+# Program Engineering
 Website for my university program engineering class.
 
 ## Description
