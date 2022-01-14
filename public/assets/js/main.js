@@ -1,7 +1,7 @@
 let util = new function () {
     this.ajax = (params, callback) => {
         let url = "";
-        if (params.path !== undefined) { // Для удаления
+        if (params.path !== undefined) {
             url = params.path;
             delete params.path;
         }

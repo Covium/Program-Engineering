@@ -1,4 +1,4 @@
-const { readFileSync, stat, writeFileSync, writeFile } = require('fs')
+const {readFileSync, stat, writeFileSync, writeFile} = require('fs')
 
 module.exports = new function () {
     const fileName = "./data.json";
@@ -7,7 +7,9 @@ module.exports = new function () {
     this.create = dt => {
         dt.Id = inc++;
         data[dt.Id] = dt;
-        writeFile(fileName, JSON.stringify(data), err => {if (err) console.error(err);});
+        writeFile(fileName, JSON.stringify(data), err => {
+            if (err) console.error(err);
+        });
         return dt
     }
     this.getAll = () => {
@@ -16,18 +18,22 @@ module.exports = new function () {
     this.get = id => data[id];
     this.update = dt => {
         data[dt.Id] = dt;
-        writeFile(fileName, JSON.stringify(data), err => {if (err) console.error(err);});
+        writeFile(fileName, JSON.stringify(data), err => {
+            if (err) console.error(err);
+        });
         return dt;
     }
     this.delete = id => {
         delete data[id];
-        writeFile(fileName, JSON.stringify(data), err => {if (err) console.error(err);});
+        writeFile(fileName, JSON.stringify(data), err => {
+            if (err) console.error(err);
+        });
     }
 
     stat(fileName, (err, stats) => {
-        if (err && err.code === "ENOENT") {    // Ошибка, когда нет такого файла
+        if (err && err.code === "ENOENT") {
             writeFileSync(fileName, "{}");
         }
-    data = JSON.parse(readFileSync(fileName, {encoding:"UTF-8"}));
+        data = JSON.parse(readFileSync(fileName, {encoding: "UTF-8"}));
     })
 }
